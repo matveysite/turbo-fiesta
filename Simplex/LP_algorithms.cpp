@@ -16,9 +16,9 @@ void dualSimplexMethod(Matrix& A, Matrix& b, Matrix& c, Matrix& dl, Matrix& dh, 
 	int iteration = 0;
 	while (!crit && solvable) {
 		cout << "----------------------------------------------------" << endl;
-		cout << ++iteration << " Ð¸Ñ‚ÐµÑ€Ð°Ñ†Ð¸Ñ" << endl;
+		cout << ++iteration << " èòåðàöèÿ" << endl;
 		cout << "----------------------------------------------------" << endl;
-		cout << "Base: " << base << endl;
+		cout << "Áàçèñ: " << base << endl;
 		Matrix A_base = A.part(base), c_base = c.transpose().part(base).transpose();
 		base.inverse();
 		Matrix A_n = A.part(base);
@@ -79,6 +79,9 @@ void dualSimplexMethod(Matrix& A, Matrix& b, Matrix& c, Matrix& dl, Matrix& dh, 
 							j0 = i;
 						}
 					}
+					else {
+						cout << "Sigma_" << i + 1 << ": +oo" << endl;
+					}
 					c++;
 				}
 			}
@@ -100,8 +103,8 @@ void dualSimplexMethod(Matrix& A, Matrix& b, Matrix& c, Matrix& dl, Matrix& dh, 
 	}
 	if (solvable) {
 		cout << "$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$" << endl;
-		cout << "ÐšÑ€Ð¸Ñ‚ÐµÑ€Ð¸Ð¹ Ð²Ñ‹Ð¿Ð¾Ð»Ð½ÐµÐ½!" << endl;
-		cout << "Base: " << base << endl;
+		cout << "Êðèòåðèé âûïîëíåí!" << endl;
+		cout << "Áàçèñ: " << base << endl;
 		cout << "X: " << x.transpose() << endl;
 		cout << "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" << endl;
 		cout << "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" << endl;
@@ -109,7 +112,7 @@ void dualSimplexMethod(Matrix& A, Matrix& b, Matrix& c, Matrix& dl, Matrix& dh, 
 	}
 	else {
 		cout << "$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$" << endl;
-		cout << "Ð ÐµÑˆÐµÐ½Ð¸Ñ Ð½ÐµÑ‚ (Ð´Ð²Ð¾Ð¹ÑÑ‚Ð²ÐµÐ½Ð½Ð°Ñ Ð¦Ð¤ Ð±ÐµÑÐºÐ¾Ð½ÐµÑ‡Ð½Ð¾ ÑƒÐ±Ñ‹Ð²Ð°ÐµÑ‚), Ð¸Ð»Ð¸ Ð·Ð°Ð´Ð°Ñ‡Ð° Ð´Ð²Ð¾Ð¹ÑÑ‚Ð²ÐµÐ½Ð½Ð¾ Ð²Ñ‹Ñ€Ð¾Ð¶Ð´ÐµÐ½Ð°!" << endl;
+		cout << "Ðåøåíèÿ íåò (äâîéñòâåííàÿ ÖÔ áåñêîíå÷íî óáûâàåò), èëè çàäà÷à äâîéñòâåííî âûðîæäåíà!" << endl;
 		cout << "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" << endl;
 		cout << "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" << endl;
 		cout << "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" << endl;
@@ -122,9 +125,9 @@ void simplexMethod(Matrix& A, Matrix& b, Matrix& c, Matrix& dl, Matrix& dh, Matr
 	int iteration = 0;
 	while (!crit) {
 		cout << "----------------------------------------------------" << endl;
-		cout << ++iteration << " Ð¸Ñ‚ÐµÑ€Ð°Ñ†Ð¸Ñ" << endl;
+		cout << ++iteration << " èòåðàöèÿ" << endl;
 		cout << "----------------------------------------------------" << endl;
-		cout << "Base: " << base << endl;
+		cout << "Áàçèñ: " << base << endl;
 		cout << "X: " << x.transpose() << endl;
 		Matrix A_base = A.part(base), c_base = c.transpose().part(base).transpose();
 		Matrix u = A_base.transpose().inverse()*c_base;
@@ -157,22 +160,27 @@ void simplexMethod(Matrix& A, Matrix& b, Matrix& c, Matrix& dl, Matrix& dh, Matr
 			Matrix ln(n - m, 1);
 			double dj0 = delta.get(j0, 0);
 			ln.get(j0n, 0) = sign(dj0);
-			cout << "l_Ð½: " << ln.transpose() << endl;
+			cout << "l_í: " << ln.transpose() << endl;
 			Set Aj0(n);
 			Aj0.add(j0);
 			Matrix lb = (-sign(dj0)) * A_base.inverse()*A.part(Aj0);
-			cout << "l_Ð±: " << lb.transpose() << endl;
+			cout << "l_á: " << lb.transpose() << endl;
 			Matrix l(lb, ln, base);
 			double minT = -1;
 			int jn = -1;
 			for (int j = 0; j < n; j++) {
 				double lj = l.get(j, 0);
-				if ((base.check(j) || j == j0) && lj != 0) {
-					double theta = (((lj < 0) ? dl.get(j, 0) : dh.get(j, 0)) - x.get(j, 0)) / lj;
-					cout << "Theta_" << j + 1 << ": " << theta << endl;
-					if ((theta < minT) || (minT == -1)) {
-						minT = theta;
-						jn = j;
+				if (base.check(j) || j == j0) {
+					if (lj != 0) {
+						double theta = (((lj < 0) ? dl.get(j, 0) : dh.get(j, 0)) - x.get(j, 0)) / lj;
+						cout << "Theta_" << j + 1 << ": " << theta << endl;
+						if ((theta < minT) || (minT == -1)) {
+							minT = theta;
+							jn = j;
+						}
+					}
+					else {
+						cout << "Theta_" << j + 1 << ": +oo" << endl;
 					}
 				}
 			}
@@ -184,8 +192,8 @@ void simplexMethod(Matrix& A, Matrix& b, Matrix& c, Matrix& dl, Matrix& dh, Matr
 		}
 	}
 	cout << "$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$" << endl;
-	cout << "ÐšÑ€Ð¸Ñ‚ÐµÑ€Ð¸Ð¹ Ð²Ñ‹Ð¿Ð¾Ð»Ð½ÐµÐ½!" << endl;
-	cout << "Base: " << base << endl;
+	cout << "Êðèòåðèé âûïîëíåí!" << endl;
+	cout << "Áàçèñ: " << base << endl;
 	cout << "X: " << x.transpose() << endl;
 	cout << "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" << endl;
 	cout << "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" << endl;

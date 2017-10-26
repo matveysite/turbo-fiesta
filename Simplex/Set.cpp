@@ -60,7 +60,7 @@ Set::~Set() {
 std::ostream & operator<<(std::ostream& out, Set& set) {
 	for (int i = 0; i < set.n; i++) {
 		if (set.set[i])
-			std::cout << i + 1 << " ";
+			std::wcout << i + 1 << " ";
 	}
 	return out;
 }

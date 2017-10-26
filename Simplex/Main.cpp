@@ -17,20 +17,20 @@ int main() {
 	cin >> m;
 
 	Matrix initialA(m, n), B(m, 1), initialC(n, 1), initialDl(n, 1), initialDh(n, 1);
-	cout << "ÐœÐ°Ñ‚Ñ€Ð¸Ñ†Ð° A: " << endl;
+	cout << "Ìàòðèöà A: " << endl;
 	cin >> initialA;
-	cout << "Ð’ÐµÐºÑ‚Ð¾Ñ€ B: " << endl;
+	cout << "Âåêòîð B: " << endl;
 	cin >> B;
-	cout << "Ð’ÐµÐºÑ‚Ð¾Ñ€ C: " << endl;
+	cout << "Âåêòîð C: " << endl;
 	cin >> initialC;
-	cout << "Ð’ÐµÐºÑ‚Ð¾Ñ€ D_*: " << endl;
+	cout << "Âåêòîð D_*: " << endl;
 	cin >> initialDl;
-	cout << "Ð’ÐµÐºÑ‚Ð¾Ñ€ D^*: " << endl;
+	cout << "Âåêòîð D^*: " << endl;
 	cin >> initialDh;
 
 	Matrix X = initialDl, W = B - initialA*X;
-	cout << "ÐŸÐµÑ€Ð²Ð°Ñ Ñ„Ð°Ð·Ð°, x: " << X.transpose() << endl;
-	cout << "ÐŸÐµÑ€Ð²Ð°Ñ Ñ„Ð°Ð·Ð°, w: " << W.transpose() << endl;
+	cout << "Ïåðâàÿ ôàçà, x: " << X.transpose() << endl;
+	cout << "Ïåðâàÿ ôàçà, w: " << W.transpose() << endl;
 	int lastNullInW = 0;
 	while ((lastNullInW < m) && (W.get(lastNullInW, 0) == 0)) {
 		lastNullInW++;
@@ -58,10 +58,10 @@ int main() {
 			base.add(i);
 			simplexA.get(i - n, i) = 1;
 		}
-		cout << "Ð’Ñ‚Ð¾Ñ€Ð°Ñ Ñ„Ð°Ð·Ð° Ð½Ðµ Ð½ÑƒÐ¶Ð½Ð°, Ñ€ÐµÑˆÐ°ÐµÐ¼ Ð±ÑƒÑ„ÐµÑ€Ð½ÑƒÑŽ Ð·Ð°Ð´Ð°Ñ‡Ñƒ." << endl;
+		cout << "Âòîðàÿ ôàçà íå íóæíà, ðåøàåì áóôåðíóþ çàäà÷ó." << endl;
 		needSecondPhase = false;
 	}
-	cout << "ÐŸÐµÑ€Ð²Ð°Ñ Ñ„Ð°Ð·Ð°, A: " << endl << simplexA << endl;
+	cout << "Ïåðâàÿ ôàçà, A: " << endl << simplexA << endl;
 	simplexMethod(simplexA, B, simplexC, simplexDl, simplexDh, X, base);
 
 	if (needSecondPhase) {
@@ -70,11 +70,11 @@ int main() {
 			i++;
 		}
 		if ((i != (n + m))) {
-			cout << "Ð ÐµÑˆÐµÐ½Ð¸Ñ Ð½ÐµÑ‚, Ð½Ðµ Ð²ÑÐµ Ð¸ÑÐºÑƒÑÑÑ‚Ð²ÐµÐ½Ð½Ñ‹Ðµ Ð¿ÐµÑ€ÐµÐ¼ÐµÐ½Ð½Ñ‹Ðµ Ð·Ð°Ð½ÑƒÐ»Ð¸Ð»Ð¸ÑÑŒ!" << endl;
+			cout << "Ðåøåíèÿ íåò, íå âñå èñêóññòâåííûå ïåðåìåííûå çàíóëèëèñü!" << endl;
 			success = false;
 		}
 		else {
-			cout << endl << "Ð’Ñ‚Ð¾Ñ€Ð°Ñ Ñ„Ð°Ð·Ð°: " << endl;
+			cout << endl << "Âòîðàÿ ôàçà: " << endl;
 			int artInBase = 0;
 			for (int i = n; i < n + m; i++) {
 				if (base.check(i)) {
@@ -89,7 +89,7 @@ int main() {
 			Set secondPhaseBase(n + artInBase);
 			secondPhaseBase.insert(base, n);
 			if (artInBase) {
-				cout << "Ð’ Ð±Ð°Ð·Ð¸ÑÐµ Ð¾ÑÑ‚Ð°Ð»Ð¸ÑÑŒ Ð¸ÑÐºÑƒÑÑÑ‚Ð²ÐµÐ½Ð½Ñ‹Ðµ Ð¿ÐµÑ€ÐµÐ¼ÐµÐ½Ð½Ñ‹Ðµ, Ñ€ÐµÑˆÐ°ÐµÐ¼ Ð±ÑƒÑ„ÐµÑ€Ð½ÑƒÑŽ Ð·Ð°Ð´Ð°Ñ‡Ñƒ!" << endl;
+				cout << "Â áàçèñå îñòàëèñü èñêóññòâåííûå ïåðåìåííûå, ðåøàåì áóôåðíóþ çàäà÷ó!" << endl;
 				int localI = 0;
 				for (int i = n; i < n + m; i++) {
 					if (base.check(i)) {
@@ -108,7 +108,7 @@ int main() {
 	}
 
 //-----------------------------------------------------------------------------------------
-	cout << "Ð”Ð²Ð¾Ð¹ÑÑ‚Ð²ÐµÐ½Ð½Ð°Ñ Ð·Ð°Ð´Ð°Ñ‡Ð°: " << endl;
+	cout << "Äâîéñòâåííàÿ çàäà÷à: " << endl;
 	cout << "( " << B.transpose() << (-1) * initialDl.transpose() << initialDh.transpose() << ") * lambda -> min" << endl;
 	Matrix dualA(initialA.transpose(), 0, 2*n);
 	for(int i = 0; i < n; i++){
@@ -118,7 +118,7 @@ int main() {
 	cout << endl;
 	cout << dualA << " * lambda = ( " << initialC.transpose() << ")^T" << endl << endl;
 	cout << "v >= 0" << endl << "w >= 0" << endl << endl;
-	cout << "ÐŸÑ€Ð¾Ð¸Ð·Ð²Ð¾Ð»ÑŒÐ½Ñ‹Ð¹ Ð´Ð²Ð¾Ð¹ÑÑ‚Ð²ÐµÐ½Ð½Ñ‹Ð¹ Ð¿Ð»Ð°Ð½: " << endl;
+	cout << "Ïðîèçâîëüíûé äâîéñòâåííûé ïëàí: " << endl;
 	Matrix w(n, 1), v(n, 1), y(n, 1);
 	for(int i = 0; i < n; i++) {
 		double c = initialC.get(i, 0);
@@ -139,7 +139,7 @@ int main() {
 			}
 		}
 		if(!fictInBase) {
-			cout << "ÐžÐ¿Ñ‚Ð¸Ð¼Ð°Ð»ÑŒÐ½Ñ‹Ð¹ Ð±Ð°Ð·Ð¸ÑÐ½Ñ‹Ð¹ Ð´Ð²Ð¾Ð¹ÑÑ‚Ð²ÐµÐ½Ð½Ñ‹Ð¹ Ð¿Ð»Ð°Ð½(Ð¾Ð½ ÑÐ¾Ð¹Ð´ÐµÑ‚ Ð¸ Ð·Ð° Ð¿Ñ€Ð¾ÑÑ‚Ð¾ Ð±Ð°Ð·Ð¸ÑÐ½Ñ‹Ð¹, Ð²ÐµÐ´ÑŒ Ð¾Ð½ Ð±Ð°Ð·Ð¸ÑÐ½Ñ‹Ð¹): " << endl;
+			cout << "Îïòèìàëüíûé áàçèñíûé äâîéñòâåííûé ïëàí(îí ñîéäåò è çà ïðîñòî áàçèñíûé, âåäü îí áàçèñíûé): " << endl;
 			Matrix dualA_base = initialA.part(base), c_base = initialC.transpose().part(base).transpose();
 			Matrix dualA_bti = dualA_base.transpose().inverse();
 			Matrix dualU = dualA_bti*c_base;
@@ -159,7 +159,7 @@ int main() {
 			}
 			cout << "lambda = ( " << dualU.transpose() << v.transpose() << w.transpose() << ")" << endl << endl;
 		} else {
-			cout << "Ð’ Ð±Ð°Ð·Ð¸ÑÐµ Ð¾ÑÑ‚Ð°Ð»Ð¸ÑÑŒ Ñ„Ð¸ÐºÑ‚Ð¸Ð²Ð½Ñ‹Ðµ Ð¿ÐµÑ€ÐµÐ¼ÐµÐ½Ð½Ñ‹Ðµ, Ð¾Ð¿Ñ‚Ð¸Ð¼Ð°Ð»ÑŒÐ½Ñ‹Ð¹ Ð±Ð°Ð·Ð¸ÑÐ½Ñ‹Ð¹ Ð´Ð²Ð¾Ð¹ÑÑ‚Ð²ÐµÐ½Ð½Ñ‹Ð¹ Ð¿Ð»Ð°Ð½ Ð½Ðµ Ð¿Ð¾ÑÑ‚Ñ€Ð¾Ð¸Ñ‚ÑŒ Ð¿Ñ€Ð¾ÑÑ‚Ð¾ Ñ‚Ð°Ðº!" << endl;
+			cout << "Â áàçèñå îñòàëèñü ôèêòèâíûå ïåðåìåííûå, îïòèìàëüíûé áàçèñíûé äâîéñòâåííûé ïëàí íå ïîñòðîèòü ïðîñòî òàê!" << endl;
 		}
 	}
 
@@ -170,7 +170,7 @@ int main() {
 		dBase.add(i);
 		dsA.get(i - n, i) = 1;
 	}
-	cout << endl << endl << endl << endl << "Ð”Ð²Ð¾Ð¹ÑÑ‚Ð²ÐµÐ½Ð½Ñ‹Ð¹ ÑÐ¸Ð¼Ð¿Ð»ÐµÐºÑ Ð¼ÐµÑ‚Ð¾Ð´: " << endl;
+	cout << endl << endl << endl << endl << "Äâîéñòâåííûé ñèìïëåêñ ìåòîä: " << endl;
 	dualSimplexMethod(dsA, B, dsC, dsDl, dsDh, dBase);
 	system("pause");
 }
